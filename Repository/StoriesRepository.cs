@@ -1,26 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using PlanningPoker.Api.Contracts;
 using PlanningPoker.Api.Data;
+using PlanningPoker.Api.Models;
 
 namespace PlanningPoker.Api.Repository;
 
 public class StoriesRepository : GenericRepository<Story>, IStoriesRepository
 {
     private readonly PlanningPokerDbContext _context;
+    private readonly IMapper _mapper;
 
-    public StoriesRepository(PlanningPokerDbContext context) : base(context)
+    public StoriesRepository(PlanningPokerDbContext context, IMapper mapper) : base(context, mapper)
     {
         _context = context;
+        _mapper = mapper;
+    }
+
+    public async Task<List<TResult>> GetAllNotEstimated<TResult>() where TResult : IBaseDto
+    {
+        return await _context.Stories.Where(x => !x.IsEstimated && !x.InProgress)
+            .ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
     public async Task<List<Story>> GetAllNotEstimated()
     {
-       return await _context.Stories.Where(x => !x.IsEstimated && !x.InProgress).ToListAsync();
+        return await _context.Stories.Where(x => !x.IsEstimated && !x.InProgress).ToListAsync();
     }
 
     public async Task<Story?> GetEstimableAsync()
     {
         return await _context.Stories.FirstOrDefaultAsync(x => x.InProgress);
+    }
+
+    public async  Task<TResult?> GetEstimableAsync<TResult>() where TResult : IBaseDto
+    {
+        return  _mapper.Map<TResult>(await _context.Stories.FirstOrDefaultAsync(x => x.InProgress));
     }
 
     public async Task StartEstimationAsync(int id)

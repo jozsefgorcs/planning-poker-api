@@ -23,8 +23,7 @@ public class StoriesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<StoryDto>>> GetAllNotEstimated()
     {
-        var stories = await _storiesRepository.GetAllNotEstimated();
-        return _mapper.Map<List<StoryDto>>(stories);
+        return await _storiesRepository.GetAllNotEstimated<StoryDto>();
     }
 
     [HttpGet]

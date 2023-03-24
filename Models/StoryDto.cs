@@ -2,7 +2,7 @@
 
 namespace PlanningPoker.Api.Models;
 
-public class StoryDto
+public class StoryDto : IBaseDto
 {
     public int Id { get; set; }
     public string Title { get; set; }
