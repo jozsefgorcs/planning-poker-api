@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PlanningPoker.Api.Configurations;
 using PlanningPoker.Api.Data;
 using Serilog;
 
@@ -28,6 +29,8 @@ builder.Host
     .UseSerilog((ctx, lc) => lc.WriteTo.Console()
         .ReadFrom
         .Configuration(ctx.Configuration));
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var app = builder.Build();
 
