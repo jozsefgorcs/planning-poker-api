@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PlanningPoker.Api.Configurations;
+using PlanningPoker.Api.Contracts;
 using PlanningPoker.Api.Data;
+using PlanningPoker.Api.Repository;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +33,9 @@ builder.Host
         .Configuration(ctx.Configuration));
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IStoriesRepository, StoriesRepository>();
 
 var app = builder.Build();
 

@@ -4,6 +4,6 @@ This is a simple Scrum Planning Poker Backend project created entirely for learn
 
 ## Technologies Used
 
-- .net 7
+- .NET 7
 - Serilog
 - Entity Framework
