@@ -26,15 +26,40 @@ public class StoriesController : ControllerBase
         return await _storiesRepository.GetAllNotEstimated<StoryDto>();
     }
 
+
+    [HttpPost]
+    public async Task<ActionResult<StoryDto>> PostStory(CreateStoryDto createCountryDto)
+    {
+        var story = _mapper.Map<Story>(createCountryDto);
+
+        await _storiesRepository.AddAsync(story);
+
+        return Created("",new { Id = story.Id });
+    }
+
     [HttpGet]
     public async Task<ActionResult<StoryDto>> GetEstimable()
     {
         var stories = await _storiesRepository.GetEstimableAsync();
         if (stories is null)
         {
-            return NoContent();
+            return NotFound();
         }
 
         return Ok(_mapper.Map<StoryDto>(stories));
+    }
+
+    [HttpPost("{id}")]
+    public async Task<IActionResult> StartEstimation(int id)
+    {
+        await _storiesRepository.StartEstimationAsync(id);
+        return NoContent();
+    }
+
+    [HttpPost("{id}")]
+    public async Task<IActionResult> FinishEstimation(int id)
+    {
+        await _storiesRepository.FinishEstimationAsync(id);
+        return NoContent();
     }
 }
