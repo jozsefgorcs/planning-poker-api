@@ -1,6 +1,6 @@
-﻿using PlanningPoker.Api.Data;
+﻿using PlanningPoker.Api.Models.Vote;
 
-namespace PlanningPoker.Api.Models;
+namespace PlanningPoker.Api.Models.Story;
 
 public class StoryDto : IBaseDto
 {

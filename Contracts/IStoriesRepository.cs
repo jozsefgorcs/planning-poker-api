@@ -11,4 +11,5 @@ public interface IStoriesRepository : IGenericRepository<Story>
     Task<TResult?> GetEstimableAsync<TResult>() where TResult : IBaseDto;
     Task StartEstimationAsync(int id);
     Task FinishEstimationAsync(int id);
+    Task<List<TResult>> GetFinishedEstimations<TResult>() where TResult : IBaseDto;
 }

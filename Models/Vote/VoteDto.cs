@@ -1,4 +1,4 @@
-﻿namespace PlanningPoker.Api.Models;
+﻿namespace PlanningPoker.Api.Models.Vote;
 
 public class VoteDto : IBaseDto
 {

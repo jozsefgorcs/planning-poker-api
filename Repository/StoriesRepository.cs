@@ -34,9 +34,9 @@ public class StoriesRepository : GenericRepository<Story>, IStoriesRepository
         return await _context.Stories.FirstOrDefaultAsync(x => x.InProgress);
     }
 
-    public async  Task<TResult?> GetEstimableAsync<TResult>() where TResult : IBaseDto
+    public async Task<TResult?> GetEstimableAsync<TResult>() where TResult : IBaseDto
     {
-        return  _mapper.Map<TResult>(await _context.Stories.FirstOrDefaultAsync(x => x.InProgress));
+        return _mapper.Map<TResult>(await _context.Stories.FirstOrDefaultAsync(x => x.InProgress));
     }
 
     public async Task StartEstimationAsync(int id)
@@ -59,5 +59,11 @@ public class StoriesRepository : GenericRepository<Story>, IStoriesRepository
         story.InProgress = false;
         story.IsEstimated = true;
         await UpdateAsync(story);
+    }
+
+    public async Task<List<TResult>> GetFinishedEstimations<TResult>() where TResult : IBaseDto
+    {
+        return _mapper.Map<List<TResult>>(await _context.Stories.Where(x => x.IsEstimated && !x.InProgress).Include(x=>x.Votes)
+            .ToListAsync());
     }
 }

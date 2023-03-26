@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PlanningPoker.Api.Contracts;
 using PlanningPoker.Api.Data;
 using PlanningPoker.Api.Models;
+using PlanningPoker.Api.Models.Story;
 
 namespace PlanningPoker.Api.Controllers;
 
@@ -48,6 +49,12 @@ public class StoriesController : ControllerBase
 
         return Ok(_mapper.Map<StoryDto>(stories));
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<List<FinishedStoryDto>>> GetFinishedStories()
+    {
+        return await _storiesRepository.GetFinishedEstimations<FinishedStoryDto>();
+    }
 
     [HttpPost("{id}")]
     public async Task<IActionResult> StartEstimation(int id)
@@ -62,4 +69,6 @@ public class StoriesController : ControllerBase
         await _storiesRepository.FinishEstimationAsync(id);
         return NoContent();
     }
+    
+    
 }
