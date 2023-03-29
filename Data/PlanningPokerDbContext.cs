@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlanningPoker.Api.Data;
 
-public class PlanningPokerDbContext : DbContext
+public class PlanningPokerDbContext : IdentityDbContext<ApiUser>
 {
     public PlanningPokerDbContext(DbContextOptions options) : base(options)
     {
