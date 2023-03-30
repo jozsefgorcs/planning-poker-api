@@ -2,6 +2,7 @@
 using PlanningPoker.Api.Data;
 using PlanningPoker.Api.Models;
 using PlanningPoker.Api.Models.Story;
+using PlanningPoker.Api.Models.Users;
 using PlanningPoker.Api.Models.Vote;
 
 namespace PlanningPoker.Api.Configurations;
@@ -15,6 +16,8 @@ public class MapperConfig : Profile
         CreateMap<Vote, VoteDto>().ReverseMap();
         CreateMap<Story, FinishedStoryDto>()
             .ForMember(x => x.VoteValue, opt => opt.MapFrom(src => CalculateVoteValue(src)));
+
+        CreateMap<ApiUserDto, ApiUser>().ReverseMap();
     }
 
     private static double CalculateVoteValue(Story src)
