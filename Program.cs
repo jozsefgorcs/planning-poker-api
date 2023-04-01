@@ -20,7 +20,9 @@ builder.Services.AddDbContext<PlanningPokerDbContext>(options =>
 builder.Services
     .AddIdentityCore<ApiUser>()
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<PlanningPokerDbContext>();
+    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("PlanningPokerApi")
+    .AddEntityFrameworkStores<PlanningPokerDbContext>()
+    .AddDefaultTokenProviders();
 
 
 builder.Services.AddControllers();
@@ -62,7 +64,7 @@ builder.Services.AddAuthentication(o =>
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero,
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-        ValidAudience =  builder.Configuration["JwtSettings:Audience"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
     };
 });

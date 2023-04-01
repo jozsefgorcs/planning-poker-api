@@ -21,10 +21,7 @@ public class AccountController : ControllerBase
         var errors = await _authManager.Register(apiUserDto);
         if (errors.Any())
         {
-            foreach (var error in errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
+            foreach (var error in errors) ModelState.AddModelError(error.Code, error.Description);
 
             return BadRequest(ModelState);
         }
@@ -36,10 +33,16 @@ public class AccountController : ControllerBase
     public async Task<ActionResult> Login(LoginDto loginDto)
     {
         var authResponse = await _authManager.Login(loginDto);
-        if (authResponse == null)
-        {
-            return Unauthorized();
-        }
+        if (authResponse == null) return Unauthorized();
+
+        return Ok(authResponse);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> RefreshToken(AuthResponseDto request)
+    {
+        var authResponse = await _authManager.VerifyRefreshToken(request);
+        if (authResponse == null) return Unauthorized();
 
         return Ok(authResponse);
     }
