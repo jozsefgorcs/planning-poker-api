@@ -31,4 +31,16 @@ public class AccountController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPost]
+    public async Task<ActionResult> Login(LoginDto loginDto)
+    {
+        var authResponse = await _authManager.Login(loginDto);
+        if (authResponse == null)
+        {
+            return Unauthorized();
+        }
+
+        return Ok(authResponse);
+    }
 }
