@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlanningPoker.Api.Contracts;
@@ -29,13 +30,14 @@ public class StoriesController : ControllerBase
 
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<StoryDto>> PostStory(CreateStoryDto createCountryDto)
     {
         var story = _mapper.Map<Story>(createCountryDto);
 
         await _storiesRepository.AddAsync(story);
 
-        return Created("",new { Id = story.Id });
+        return Created("", new { Id = story.Id });
     }
 
     [HttpGet]
@@ -49,7 +51,7 @@ public class StoriesController : ControllerBase
 
         return Ok(_mapper.Map<StoryDto>(stories));
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<List<FinishedStoryDto>>> GetFinishedStories()
     {
@@ -57,6 +59,7 @@ public class StoriesController : ControllerBase
     }
 
     [HttpPost("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> StartEstimation(int id)
     {
         await _storiesRepository.StartEstimationAsync(id);
@@ -64,11 +67,10 @@ public class StoriesController : ControllerBase
     }
 
     [HttpPost("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> FinishEstimation(int id)
     {
         await _storiesRepository.FinishEstimationAsync(id);
         return NoContent();
     }
-    
-    
 }
